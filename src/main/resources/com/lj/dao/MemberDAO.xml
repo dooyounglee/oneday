@@ -28,10 +28,10 @@
 		insert into member(email,pass,host) values
 		(#{email},#{pass},#{host})
 	</insert> -->
-	<!-- <insert id="join">
+	<insert id="join">
 		insert into member(m_no,email,pass,host) values
 		(seq_member.nextval,#{email},#{pass},#{host})
-	</insert> -->
+	</insert>
 	
 	<insert id="joinH">
 		insert into host(m_no,email,pass,phone) values
