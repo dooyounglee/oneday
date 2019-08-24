@@ -45,4 +45,25 @@
 	<delete id="leave">
 		delete from member where m_no=#{m_no}
 	</delete>
+	
+	<select id="getMyClassList" resultType="com.lj.vo.ClassVO">
+	<![CDATA[
+		select * from class where m_no=#{m_no}
+		]]>
+	</select>
+	
+	<!-- 메일인증 -->
+	<insert id="insertAuth">
+		insert into joinauth values(#{email},#{code})
+	</insert>
+	
+	<delete id="auth">
+		delete from joinauth where email=#{email} and code=#{code}
+	</delete>
+	
+	<select id="isAuth" resultType="int">
+	<![CDATA[
+		select count(*) from joinauth where email=#{email}
+		]]>
+	</select>
 </mapper>
