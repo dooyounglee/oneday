@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lj.dao.MemberDAO;
+import com.lj.vo.ClassVO;
+import com.lj.vo.JoinAuth;
 import com.lj.vo.MemberVO;
 
 import lombok.AllArgsConstructor;
@@ -23,19 +25,22 @@ public class MemberServiceImpl implements MemberService {
 	
 	@Override
 	public int join(MemberVO m) {
-		return md.join(m);
-		
+		int result=0;
+		result=md.join(m);
+		return result;
 	}
 
 	@Transactional
 	@Override
-	public void joinH(MemberVO m) {
+	public int joinH(MemberVO m) {
+		int result=0;
 		m.setHost("Y");
-		md.join(m);
+		System.out.println(md.join(m));
 		
 		MemberVO host=getMember(m.getEmail(),m.getPass());
 		host.setPhone(m.getPhone());
-		md.joinH(host);
+		result=md.joinH(host);
+		return result;
 	}
 
 	@Override
@@ -63,9 +68,32 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public void leave(MemberVO m) {
-		log.info(m);
-		md.leave(m);
+	public int leave(MemberVO m) {
+		int result=0;
+		result=md.leave(m);
+		return result;
+	}
+
+	@Override
+	public ArrayList<ClassVO> getMyClassList(MemberVO mem) {
+		return md.getMyClassList(mem);
+	}
+
+	@Override
+	public void insertAuth(JoinAuth joinauth) {
+		md.insertAuth(joinauth);
+	}
+
+	@Override
+	public int auth(JoinAuth joinauth) {
+		int result=md.auth(joinauth);
+		return result;
+	}
+
+	@Override
+	public int isAuth(MemberVO m) {
+		int result=md.isAuth(m);
+		return result;
 	}
 
 
