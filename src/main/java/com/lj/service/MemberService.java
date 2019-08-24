@@ -2,13 +2,15 @@ package com.lj.service;
 
 import java.util.ArrayList;
 
+import com.lj.vo.ClassVO;
+import com.lj.vo.JoinAuth;
 import com.lj.vo.MemberVO;
 
 public interface MemberService {
 
 	public int join(MemberVO m);
 	
-	public void joinH(MemberVO m);
+	public int joinH(MemberVO m);
 	
 	public MemberVO getMember(String email,String pass);
 
@@ -18,5 +20,13 @@ public interface MemberService {
 
 	public ArrayList<MemberVO> getAllList();
 
-	public void leave(MemberVO m);
+	public int leave(MemberVO m);
+
+	public ArrayList<ClassVO> getMyClassList(MemberVO mem);
+
+	public void insertAuth(JoinAuth joinauth);
+
+	public int auth(JoinAuth joinauth);
+
+	public int isAuth(MemberVO m);
 }
