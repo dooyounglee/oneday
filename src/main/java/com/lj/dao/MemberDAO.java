@@ -30,4 +30,6 @@ public interface MemberDAO {
 
 	public int isAuth(MemberVO m);
 
+	public int changePass(MemberVO mem);
+
 }
