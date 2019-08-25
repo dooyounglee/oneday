@@ -29,4 +29,7 @@ public interface MemberService {
 	public int auth(JoinAuth joinauth);
 
 	public int isAuth(MemberVO m);
+
+	public int changePass(MemberVO mem);
+	
 }
