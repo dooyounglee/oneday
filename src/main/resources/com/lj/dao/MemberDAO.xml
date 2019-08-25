@@ -24,14 +24,14 @@
 		]]>
 	</select>
 
-	<!-- <insert id="join" resultType="int">
+	<insert id="join">
 		insert into member(email,pass,host) values
 		(#{email},#{pass},#{host})
-	</insert> -->
-	<insert id="join">
+	</insert>
+	<!-- <insert id="join">
 		insert into member(m_no,email,pass,host) values
 		(seq_member.nextval,#{email},#{pass},#{host})
-	</insert>
+	</insert> -->
 	
 	<insert id="joinH">
 		insert into host(m_no,email,pass,phone) values
@@ -52,7 +52,6 @@
 		]]>
 	</select>
 	
-	<!-- 메일인증 -->
 	<insert id="insertAuth">
 		insert into joinauth values(#{email},#{code})
 	</insert>
@@ -66,4 +65,8 @@
 		select count(*) from joinauth where email=#{email}
 		]]>
 	</select>
+	
+	<update id="changePass">
+		update member set pass=#{pass} where email=#{email}
+	</update>
 </mapper>
