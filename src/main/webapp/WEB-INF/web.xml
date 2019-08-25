@@ -42,4 +42,18 @@
 			<include-coda>/WEB-INF/views/include/footer.jsp</include-coda><!-- footer -->
 		</jsp-property-group>
 	</jsp-config>
+	
+	<bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="exceptionMappings">
+			<props>
+				<!-- <prop key="java.lang.ArithmeticException">
+					common/arithmeticError.jsp
+				</prop>
+				<prop key="org.apache.jasper.JasperException">
+					/exception/defaulterror.jsp
+				</prop> -->
+			</props>
+		</property>
+		<property name="defaultErrorView" value="exception/defaulterror" />
+	</bean>
 </web-app>
