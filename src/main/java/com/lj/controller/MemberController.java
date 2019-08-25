@@ -1,10 +1,14 @@
 package com.lj.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMessage.RecipientType;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -30,6 +34,7 @@ public class MemberController {
 	private MemberService mService;
 	private JavaMailSenderImpl mailSender;
 	
+	//로그인페이지로
 	@GetMapping("/login")
 	public String login(Model model) {
 		model.addAttribute("mlist", mService.getMemberList());
@@ -38,6 +43,7 @@ public class MemberController {
 		return "member/login";
 	}
 	
+	//로그인
 	@PostMapping("/login")
 	public String login(MemberVO m,HttpServletRequest req, Model model) {
 		log.info("login버튼 눌렀다."+m);
@@ -48,14 +54,15 @@ public class MemberController {
 			session.setAttribute("mem", mem);
 			return "index";
 		}else if(isAuth>0){
-			model.addAttribute("error", "서비스를 이용하시려면 메일 인증을 해주세요.");
+			model.addAttribute("message", "서비스를 이용하시려면 메일 인증을 해주세요.");
 			return "member/login";
 		}else {
-			model.addAttribute("error", "아이디, 비번을 확인하세요.");
+			model.addAttribute("message", "아이디, 비번을 확인하세요.");
 			return "member/login";
 		}
 	}
 	
+	//일반회원가입 페이지로
 	@GetMapping("/join")
 	public String join(Model model) {
 //		MessageDigest md=MessageDigest.getInstance("SHA-512");
@@ -68,27 +75,28 @@ public class MemberController {
 		return "member/join";
 	}
 	
+	//일반 회원가입
 	@PostMapping("/join")
-	public String join(MemberVO m) {
+	public String join(MemberVO m,HttpServletRequest req) {
 		m.setHost("N");
 //		MessageDigest md=MessageDigest.getInstance("SHA-512");
 //		byte[] bytes="a".getBytes(Charset.forName("UTF-8"));
 //		md.update(bytes);
 //		System.out.println(Base64.getEncoder().encodeToString(md.digest()));
 		
-		String randomCode=randomCode();
+		String randomCode=randomCode(50);
 		//인증메일보내기
-/*		MimeMessage msg = mailSender.createMimeMessage();
+		MimeMessage msg = mailSender.createMimeMessage();
         try {
 			msg.setSubject("테스트메일");
-			msg.setText("http://localhost:8080/member/auth?email=gostbaduckin@naver.com&code="+randomCode);
+			msg.setText("http://"+req.getServerName()+":"+req.getServerPort()+"/member/auth?email="+m.getEmail()+"&code="+randomCode);
 			msg.setFrom(new InternetAddress(mailSender.getUsername()));
-		    msg.setRecipient(RecipientType.TO , new InternetAddress("gostbaduckin@naver.com"));
+		    msg.setRecipient(RecipientType.TO , new InternetAddress(m.getEmail()));
         } catch (MessagingException e) {
 			e.printStackTrace();
 		}
-        mailSender.send(msg);*/
-		System.out.println("http://localhost:8080/member/auth?email="+m.getEmail()+"&code="+randomCode);
+        mailSender.send(msg);
+		System.out.println("http://"+req.getServerName()+":"+req.getServerPort()+"/member/auth?email="+m.getEmail()+"&code="+randomCode);
         
 		int result=mService.join(m);
 		if(result>0) {
@@ -100,6 +108,7 @@ public class MemberController {
 		return "index";
 	}
 	
+	//호스트가입 페이지로
 	@GetMapping("/joinH")
 	public String joinH(Model model) {
 		model.addAttribute("mlist", mService.getMemberList());
@@ -107,6 +116,7 @@ public class MemberController {
 		return "member/joinH";
 	}
 	
+	//호스트가입
 	@PostMapping("/joinH")
 	public String joinH(MemberVO m) {
 		log.info("controller "+m);
@@ -114,6 +124,7 @@ public class MemberController {
 		return "index";
 	}
 	
+	//마이페이지
 	@GetMapping("/mypage")
 	public String mypage(Model model,HttpServletRequest req) {
 		HttpSession session = req.getSession();
@@ -122,6 +133,7 @@ public class MemberController {
 		return "member/mypage";
 	}
 	
+	//로그아웃
 	@GetMapping("/logout")
 	public String logout(HttpServletRequest req) {
 		HttpSession session = req.getSession();
@@ -129,17 +141,20 @@ public class MemberController {
 		return "index";
 	}
 	
+	//내정보 수정 페이지로
 	@GetMapping("/update")
 	public String update() {
 		return "member/mypage_update";
 	}
 	
-	@PostMapping("/update")
-	public String update(MemberVO m) {
-		log.info("..........update");
-		return "member/mypage";
-	}
+	//내정보 수정
+//	@PostMapping("/update")
+//	public String update(MemberVO m) {
+//		log.info("..........update");
+//		return "member/mypage";
+//	}
 	
+	//탈퇴해버리기
 	@GetMapping("/leave")
 	public String leave(MemberVO m, HttpServletRequest req) {
 		log.info(".......controller leave "+m);
@@ -153,6 +168,7 @@ public class MemberController {
 		return "index";
 	}
 	
+	//유저가 인증메일에 url누르면
 	@GetMapping("auth")
 	public String auth(JoinAuth joinauth,Model model) {
 		int result=mService.auth(joinauth);
@@ -161,7 +177,60 @@ public class MemberController {
 		
 	}
 	
-	public String randomCode() {
+	//비번 모른다면
+	@PostMapping("findpass")
+	public void findPass(HttpServletRequest req,HttpServletResponse res) {
+		try {
+			PrintWriter out;
+			out = res.getWriter();
+			String email=req.getParameter("email");
+			String randomCode=randomCode(10);
+			MemberVO mem=new MemberVO();
+			mem.setEmail(email);
+			mem.setPass(randomCode);
+			int result=mService.changePass(mem);
+			if(result>0) {
+				//이메일 안내
+				MimeMessage msg = mailSender.createMimeMessage();
+		        try {
+					msg.setSubject("[oneday]임시비밀번호");
+					msg.setText("임시비밀번호는 ["+randomCode+"] 입니다. 퍼뜩 로그인 후 수정하세요.");
+					msg.setFrom(new InternetAddress(mailSender.getUsername()));
+				    msg.setRecipient(RecipientType.TO , new InternetAddress(email));
+		        } catch (MessagingException e) {
+					e.printStackTrace();
+				}
+		        mailSender.send(msg);
+		        out.print("success");
+			}else {
+				out.print("fail");//메일이 없거나.. 암튼 실패
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}		
+	}
+	
+	//비번수정
+	@PostMapping("changepass")
+	public String changePass(MemberVO m,HttpServletRequest req,Model model) {
+		String newpass=req.getParameter("newpass");
+		MemberVO mem=mService.getMember(m.getEmail(), m.getPass());
+		mem.setPass(newpass);
+		int result=mService.changePass(mem);
+		if(result>0) {
+			MemberVO m1=new MemberVO();
+			m1.setEmail(mem.getEmail());
+			m1.setPass(mem.getPass());
+			m1=mService.getMember(m1.getEmail(), m1.getPass());
+			HttpSession session=req.getSession();
+			session.setAttribute("mem", m1);
+			model.addAttribute("message", "성공적으로 비번을 바꿨습니다.");
+		}
+		return "/member/mypage";
+	}
+	
+	//랜덤코드 생성
+	public String randomCode(int len) {
 		String code="";
 		int num = 0;
 		while (true) {
@@ -169,7 +238,7 @@ public class MemberController {
 			if ((num >= 48 && num <= 57) || (num >= 65 && num <= 90) || (num >= 97 && num <= 122)) {
 				code+=(char)num;
 			}
-			if(code.length()>50)break;
+			if(code.length()>len)break;
 		}
 		return code;
 	}
