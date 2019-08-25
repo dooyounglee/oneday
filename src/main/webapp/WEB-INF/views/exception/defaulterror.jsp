@@ -10,7 +10,7 @@
 <body>
 
 	<!-- Page Header -->
-	<header class="masthead"
+	<!-- <header class="masthead"
 		style="background-image: url('/resources/home-bg.jpg')">
 		<div class="overlay"></div>
 		<div class="container">
@@ -23,7 +23,7 @@
 				</div>
 			</div>
 		</div>
-	</header>
-	
+	</header> -->
+	error page
 </body>
 </html>
