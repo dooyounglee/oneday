@@ -5,22 +5,8 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<script>
-function leave(){
-	if(confirm("정말로?")){
-		location.href="leave?m_no=${mem.m_no}"
-	}
-}
-</script>
 </head>
 <body>
-<c:if test="${mem eq null }">
-	<script>
-		alert("로그인해")
-		location.href="login"
-	</script>
-</c:if>
-
 	<!-- Page Header -->
 	<header class="masthead"
 		style="background-image: url('/resources/startbootstrap-clean-blog-gh-pages/img/home-bg.jpg')">
@@ -29,19 +15,27 @@ function leave(){
 			<div class="row">
 				<div class="col-lg-8 col-md-10 mx-auto">
 					<div class="site-heading">
-						<h1>My Page</h1>
-						<span class="subheading">마이페이지</span>
+						<h1>Join</h1>
+						<span class="subheading">일반가입</span>
 					</div>
 				</div>
 			</div>
 		</div>
 	</header>
 	
-mypage<br>
-${mem }<br>
-<a href="update">수정</a> | <button onclick="leave()">탈퇴</button><br>
-<c:forEach var="c" items="${classlist }">
-	${c }<br>
-</c:forEach>
+일반 회원가입<br>
+<form action="join" method="post" autocomplete="off">
+	이메일:<input name="email" /><br>
+	비번:<input name="pass" /><br>
+	<input type=submit value="가입" />
+	<br>
+	<c:forEach var="m" items="${mlist }">
+		${m }<br>
+	</c:forEach>
+	<br>
+	<c:forEach var="h" items="${hlist }">
+		${h }<br>
+	</c:forEach>
+</form>
 </body>
 </html>
