@@ -96,7 +96,10 @@ public class MemberServiceImpl implements MemberService {
 		return result;
 	}
 
-
-
+	@Override
+	public int changePass(MemberVO mem) {
+		int result=md.changePass(mem);
+		return result;
+	}
 	
 }
