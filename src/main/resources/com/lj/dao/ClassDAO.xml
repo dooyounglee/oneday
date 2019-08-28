@@ -8,12 +8,19 @@
 <mapper namespace="com.lj.dao.ClassDAO">
 
 	<insert id="addClass">
+		insert into class (class_no, m_no, title, title_img, content, price, address, address_detail, 
+                  class_day, class_time, maxperson, reg_date, possible)
+                  
+   values(seq_class.nextval, #{m_no}, #{title}, default, #{content}, #{price}, #{address}, #{address_detail},
+         #{class_day}, #{class_time}, #{maxperson}, sysdate, #{maxperson})
+	</insert>
+	<!-- <insert id="addClass">
 		insert into class (m_no, title, title_img, content, price, address, address_detail, 
                   class_day, class_time, maxperson, reg_date, possible)
                   
    values(#{m_no}, #{title}, default, #{content}, #{price}, #{address}, #{address_detail},
          #{class_day}, #{class_time}, #{maxperson}, sysdate(), #{maxperson})
-	</insert>
+	</insert> -->
 	
 	<!-- 클래스리스트 가져오기 -->
 	<select id="getList" resultType="com.lj.vo.ClassVO">
