@@ -12,6 +12,7 @@ public class FrontController {
 	// 메인화면
 	@RequestMapping(value= "/")
 	public String index(){
+		model.addAttribute("clist", cService.getList());
 		return "index";
 	}
 	
