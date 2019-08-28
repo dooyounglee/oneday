@@ -43,5 +43,8 @@ ${mem }<br>
 <c:forEach var="c" items="${classlist }">
 	${c }<br>
 </c:forEach>
+<c:forEach var="b" items="${books }">
+	${b }<button onclick="location.href='/book/cancel/${b.b_no }'">예약취소</button><br>
+</c:forEach>
 </body>
 </html>
