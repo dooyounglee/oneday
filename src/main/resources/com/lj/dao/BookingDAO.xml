@@ -5,7 +5,7 @@
 
 <mapper namespace="com.lj.dao.BookingDAO">
 	<insert id="bookClass">
-		insert into book values(seq_book.nextval,#{m_no}, #{class_no}, sysdate())
+		insert into book values(seq_book.nextval,#{m_no}, #{class_no}, sysdate)
 	</insert>
 	<!-- <insert id="bookClass">
 		insert into book(m_no,class_no,reg_date) values(#{m_no}, #{class_no}, sysdate())
