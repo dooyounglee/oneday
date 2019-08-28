@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lj.dao.BookingDAO">
+	<!-- <insert id="bookClass">
+		insert into book values(seq_book.nextval,#{m_no}, #{class_no}, sysdate())
+	</insert> -->
+	<insert id="bookClass">
+		insert into book(m_no,class_no,reg_date) values(#{m_no}, #{class_no}, sysdate())
+	</insert>
+	
+	<select id="getMyList" resultType="com.lj.vo.BookingVO">
+		select * from book where m_no=#{m_no}
+	</select>
+	
+	<select id="getBooking" resultType="com.lj.vo.BookingVO">
+		select * from book where b_no=#{b_no}
+	</select>
+	
+	<update id="minusPossible">
+		update class set possible=possible-1 where class_no=#{class_no} and possible>0
+	</update>
+	
+	<update id="plusPossible">
+		update class set possible=possible+1 where class_no=#{class_no}
+	</update>
+	
+	<delete id="bookCancel">
+		delete from book where b_no=#{b_no}
+	</delete>
+</mapper>
