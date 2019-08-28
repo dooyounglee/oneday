@@ -49,14 +49,18 @@
 			</button>
 			<div class="collapse navbar-collapse" id="navbarResponsive">
 				<ul class="navbar-nav ml-auto">
-
+					<li class="nav-item"><a class="nav-link" href="/class/classList">Class List</a>
+					</li>
+					<li class="nav-item"> | </li>
 					<c:choose>
 						<c:when test="${mem != null }">
 							<c:if test="${mem.host eq 'Y' }">
 								<li class="nav-item"><a class="nav-link" href="/class/addClass">Add Class</a>
 								</li>
-								<li class="nav-item"><a class="nav-link" href="/class/classList">Class List</a>
+								<li class="nav-item"><a class="nav-link" href="/host/myClass?mno=${mem.m_no }">My Classes</a>
 								</li>
+								<%-- <li class="nav-item"><a class="nav-link" href="/host/host?mno=${mem.m_no}">Host Page</a>
+								</li> --%>
 								<li class="nav-item"> | </li>
 							</c:if>
 							<li class="nav-item"><a class="nav-link"
@@ -83,6 +87,9 @@
 		</div>
 		<div style="position:absolute;top:0px;left:0px;">${mem }</div>
 	</nav>
+
+
+	
 
 </body>
 </html>
