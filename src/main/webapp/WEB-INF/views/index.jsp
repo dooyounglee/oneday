@@ -27,6 +27,14 @@
 	<c:if test="${mem != null }">
 		${mem.email } 님 안녕하세요.
 	</c:if>
+	
+	<ul>
+		<c:forEach var="c" items="${clist }">
+			<li>
+				${c}<br>
+			</li>
+		</c:forEach>
+	</ul>
 
 </body>
 </html>
