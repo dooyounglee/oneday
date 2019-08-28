@@ -31,6 +31,21 @@
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 
+	<!-- Encoding Filter 추가 -->
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	
 	<jsp-config>
 		<jsp-property-group>
 			<display-name>Display</display-name>
@@ -41,19 +56,8 @@
 			<include-prelude>/WEB-INF/views/include/header.jsp</include-prelude><!-- header -->
 			<include-coda>/WEB-INF/views/include/footer.jsp</include-coda><!-- footer -->
 		</jsp-property-group>
+		<jsp-engine>
+              <check-included-jspfile>true</check-included-jspfile>
+          </jsp-engine>
 	</jsp-config>
-	
-	<bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
-		<property name="exceptionMappings">
-			<props>
-				<!-- <prop key="java.lang.ArithmeticException">
-					common/arithmeticError.jsp
-				</prop>
-				<prop key="org.apache.jasper.JasperException">
-					/exception/defaulterror.jsp
-				</prop> -->
-			</props>
-		</property>
-		<property name="defaultErrorView" value="exception/defaulterror" />
-	</bean>
 </web-app>
