@@ -2,8 +2,43 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<!-- id : 해당 메서드 명 -->
+<!--	 namespace : mapper인터페이스 명 -->
 <mapper namespace="com.lj.dao.ClassDAO">
 
+	<insert id="addClass">
+		insert into class (m_no, title, title_img, content, price, address, address_detail, 
+                  class_day, class_time, maxperson, reg_date, possible)
+                  
+   values(#{m_no}, #{title}, default, #{content}, #{price}, #{address}, #{address_detail},
+         #{class_day}, #{class_time}, #{maxperson}, sysdate(), #{maxperson})
+	</insert>
+	
+	<!-- 클래스리스트 가져오기 -->
+	<select id="getList" resultType="com.lj.vo.ClassVO">
+		select * from class
+	</select>
+	
+	<select id="get" resultType="com.lj.vo.ClassVO">
+		select * from class where class_no = #{cno}
+	</select>
+	
+	<select id="getMyList" resultType="com.lj.vo.ClassVO">
+		select * from class where m_no = #{mno}
+	</select>
 
+	<update id="updateClass">
+		update class
+		set title = #{title},
+			content = #{content},
+			price = #{price},
+			address = #{address},
+			address_detail = #{address_detail},
+			class_day = #{class_day},
+			class_time = #{class_time},
+			maxperson = #{maxperson}
+		where class_no = #{class_no}
+	</update>
 
 </mapper>
