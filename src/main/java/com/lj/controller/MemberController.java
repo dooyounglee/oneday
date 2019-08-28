@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.lj.service.BookingService;
 import com.lj.service.MemberService;
 import com.lj.vo.JoinAuth;
 import com.lj.vo.MemberVO;
@@ -32,6 +33,7 @@ import lombok.extern.log4j.Log4j;
 public class MemberController {
 
 	private MemberService mService;
+	private BookingService bService;
 	private JavaMailSenderImpl mailSender;
 	
 	//로그인페이지로
@@ -40,7 +42,7 @@ public class MemberController {
 		model.addAttribute("mlist", mService.getMemberList());
 		model.addAttribute("hlist", mService.getHostList());
 		model.addAttribute("list", mService.getAllList());
-		return "member/login";
+		return "/member/login";
 	}
 	
 	//로그인
@@ -52,13 +54,13 @@ public class MemberController {
 		int isAuth=mService.isAuth(m);//joinauth테이블에 있는지?
 		if(mem!=null && isAuth==0) {
 			session.setAttribute("mem", mem);
-			return "index";
+			return "redirect:/";
 		}else if(isAuth>0){
 			model.addAttribute("message", "서비스를 이용하시려면 메일 인증을 해주세요.");
-			return "member/login";
+			return "/member/login";
 		}else {
 			model.addAttribute("message", "아이디, 비번을 확인하세요.");
-			return "member/login";
+			return "/member/login";
 		}
 	}
 	
@@ -72,7 +74,7 @@ public class MemberController {
 		
 		model.addAttribute("mlist", mService.getMemberList());
 		model.addAttribute("hlist", mService.getHostList());
-		return "member/join";
+		return "/member/join";
 	}
 	
 	//일반 회원가입
@@ -105,7 +107,7 @@ public class MemberController {
 			joinauth.setCode(randomCode);
 			mService.insertAuth(joinauth);
 		}
-		return "index";
+		return "redirect:/";
 	}
 	
 	//호스트가입 페이지로
@@ -113,7 +115,7 @@ public class MemberController {
 	public String joinH(Model model) {
 		model.addAttribute("mlist", mService.getMemberList());
 		model.addAttribute("hlist", mService.getHostList());
-		return "member/joinH";
+		return "/member/joinH";
 	}
 	
 	//호스트가입
@@ -121,7 +123,7 @@ public class MemberController {
 	public String joinH(MemberVO m) {
 		log.info("controller "+m);
 		int result=mService.joinH(m);
-		return "index";
+		return "redirect:/";
 	}
 	
 	//마이페이지
@@ -130,7 +132,8 @@ public class MemberController {
 		HttpSession session = req.getSession();
 		MemberVO mem=(MemberVO)session.getAttribute("mem");
 		model.addAttribute("classlist", mService.getMyClassList(mem));
-		return "member/mypage";
+		model.addAttribute("books", bService.getMyList(mem));
+		return "/member/mypage";
 	}
 	
 	//로그아웃
@@ -138,13 +141,13 @@ public class MemberController {
 	public String logout(HttpServletRequest req) {
 		HttpSession session = req.getSession();
 		session.invalidate();
-		return "index";
+		return "redirect:/";
 	}
 	
 	//내정보 수정 페이지로
 	@GetMapping("/update")
 	public String update() {
-		return "member/mypage_update";
+		return "/member/mypage_update";
 	}
 	
 	//내정보 수정
@@ -163,9 +166,9 @@ public class MemberController {
 		if(result>0) {
 			HttpSession session = req.getSession();
 			session.invalidate();
-			return "index";
+			return "redirect:/";
 		}
-		return "index";
+		return "redirect:/";
 	}
 	
 	//유저가 인증메일에 url누르면
@@ -173,7 +176,7 @@ public class MemberController {
 	public String auth(JoinAuth joinauth,Model model) {
 		int result=mService.auth(joinauth);
 		model.addAttribute("message", "메일 인증에 성공했습니다. 로그인 후 서비스 이용가능합니다.");
-		return "index";
+		return "redirect:/";
 		
 	}
 	
